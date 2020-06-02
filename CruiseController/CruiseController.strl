@@ -1,8 +1,36 @@
 module CruiseController:
 
 % Inputs
+input On;
+input Off;
+input Resume;
+input Set;
+input QuickDecel;
+input QuickAccel;
+input Accel : float;
+input Brake : float;
+input Speed : float;
+
 % Outputs
-% Locals
+output CruiseSpeed : float;
+output ThrottleCmd : float;
+output CruiseState : integer;
+
+% CRUISE_CONTROL_FSM
+
+% FSM encoding:
+% state 1 = OFF,
+% state 2 = ON,
+% state 3 = STDBY,
+% state 4 = DISABLE
+
+trap T1 in
+    var state := 1 : integer in
+        loop
+            await On;
+        end loop
+    end var
+end trap
 
 end module
 
