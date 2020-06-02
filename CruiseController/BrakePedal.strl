@@ -1,0 +1,17 @@
+module BrakePedal:
+
+% Inputs
+input Brake : float;
+
+% Outputs
+output BrakePressed;
+
+constant PedalsMin = 3.0f : float;
+
+loop
+    if ?Brake > PedalsMin then
+        emit BrakePressed;
+    end if;
+each tick;
+
+end module
