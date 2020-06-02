@@ -1,0 +1,60 @@
+module SpeedControl:
+
+% Inputs
+input EnableCruiseControl;
+input DisableCruiseControl;
+input isGoingOn;
+input Speed : float;
+input CruiseSpeed : float;
+input Accel : float;
+
+% Outputs
+output OutOfSpeedRange;
+output ThrottleCmd : float;
+
+constant SpeedMin = 30.0f : float;
+constant SpeedMax = 150.0f : float;
+
+function regulateThrottle(boolean, float, float) : float;
+
+% FSM encoding:
+% state 0 = Disabled,
+% state 1 = Active,
+
+var state := 0 : integer in
+    loop
+        trap T1 in
+            if state = 0 then
+                present EnableCruiseControl then
+                    emit ThrottleCmd(regulateThrottle(true, ?CruiseSpeed, ?Speed));
+
+                    if ?Speed < SpeedMin or ?Speed > SpeedMax then
+                        emit OutOfSpeedRange;
+                    end if;
+                    state := 1; exit T1;
+                else
+                    emit ThrottleCmd(?Accel);
+                end present;
+            end if;
+
+            if state = 1 then
+                present DisableCruiseControl then
+                    emit ThrottleCmd(?Accel);
+                    state := 0; exit T1;
+                else
+                    present isGoingOn then
+                        emit ThrottleCmd(regulateThrottle(true, ?CruiseSpeed, ?Speed));
+                    else
+                        emit ThrottleCmd(regulateThrottle(false, ?CruiseSpeed, ?Speed));
+                    end present;
+
+                    if ?Speed < SpeedMin or ?Speed > SpeedMax then
+                        emit OutOfSpeedRange;
+                    end if;
+                end present;
+            end if;
+        end trap;
+    each tick;
+end var
+
+end module
