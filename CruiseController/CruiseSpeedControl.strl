@@ -1,0 +1,31 @@
+module CruiseSpeedControl:
+
+% Inputs
+input Set;
+input Speed : float;
+input EnableCruiseControl;
+input QuickDecel;
+input QuickAccel;
+
+% Outputs
+output CruiseSpeed := 0.0f : float;
+
+constant Speedinc = 2.5f : float;
+
+function limitSpeed(float) : float;
+
+var temp := 0.00f : float in
+loop
+    present
+    case (Set or EnableCruiseControl) do
+        temp := limitSpeed(?Speed);
+    case (QuickAccel and not QuickDecel) do
+        temp := limitSpeed(temp + Speedinc);
+    case (QuickDecel and not QuickAccel) do
+        temp := limitSpeed(temp- Speedinc);
+    end present;
+	emit CruiseSpeed(temp);
+each tick;
+end var;
+
+end module
