@@ -11,8 +11,7 @@ input BrakePressed;
 % Outputs
 output CruiseState : integer;
 output isGoingOn;
-output EnableCruiseControl;
-output DisableCruiseControl;
+output IsInOnState;
 
 % CRUISE_CONTROL_FSM
 
@@ -25,41 +24,43 @@ var state := 0 : integer in
 emit CruiseState(state);
 
 loop
+    await tick;
+    
     if state = 0 then
         present On then
             state := 1;
-            emit EnableCruiseControl;
             emit isGoingOn;
+            emit IsInOnState;
             emit CruiseState(state);
         end present;
     else 
         present Off then
             state := 0;
-            emit DisableCruiseControl;
             emit CruiseState(state);
         else
             if state = 1 then
-                trap t1 in
-                    present (BrakePressed) then
-                        state := 2;
-                        emit CruiseState(state);
-                        exit t1;
-                    end present;
+                present BrakePressed then
+                    state := 2;
+                    emit CruiseState(state);
+                else
                     present (OutOfSpeedRange or AccelPressed) then
                         state := 3;
                         emit CruiseState(state);
-                        exit t1;
+                    else
+                        emit IsInOnState;
+                        emit CruiseState(state);
                     end present;
-                end trap;
+                end present;
             elsif state = 2 then
-                present Resume then
+                present (Resume and not BrakePressed) then
                     present (OutOfSpeedRange or AccelPressed) then
+                        state := 3;
+                        emit CruiseState(state);
+                    else
                         state := 1;
+                        emit IsInOnState;
                         emit CruiseState(state);
                         emit isGoingOn;
-                    else
-                        state := 3;
-                        emit CruiseState(state);
                     end present;
                 end present
             else
@@ -71,6 +72,7 @@ loop
                     end present;
                     present (not OutOfSpeedRange and not AccelPressed) then
                         state := 1;
+                        emit IsInOnState;
                         emit CruiseState(state);
                         exit t3;
                     end present;
@@ -79,7 +81,7 @@ loop
         end present;
     end if;
     
-each tick;
+end loop;
 end var
 
 end module

@@ -2,9 +2,8 @@ module CruiseSpeedControl:
 
 % Inputs
 input Set;
-input Speed : float;
-input EnableCruiseControl;
-input DisableCruiseControl;
+input Speed := 0.0f : float;
+input IsInOnState;
 input QuickDecel;
 input QuickAccel;
 
@@ -21,16 +20,17 @@ function limitSpeed(float) : float;
 
 var state := 0 : integer in
 var temp := 0.00f : float in
+emit CruiseSpeed(temp);
 loop
     if state = 0 then
-        present EnableCruiseControl then
+        present IsInOnState then
             state := 1;
             temp := limitSpeed(?Speed);
             emit CruiseSpeed(temp);
         end present
     else
         present
-        case DisableCruiseControl do
+        case (not IsInOnState) do %TODO: Add a third state. OFF, InOn(Active) NotInOn(But still active). Only accept Set and Quick commands in the 2 active states. Moving from OFF to InOn will set cruseSpeed to Speed as it is the initial turn on. May need EnableCruiseControl signal again.
             state := 0;
         case Set do
             temp := limitSpeed(?Speed);

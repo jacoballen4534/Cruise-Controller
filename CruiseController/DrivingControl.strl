@@ -1,8 +1,7 @@
 module DrivingControl:
 
 % Inputs
-input EnableCruiseControl;
-input DisableCruiseControl;
+input IsInOnState;
 input isGoingOn;
 input Speed : float;
 input Accel : float;
