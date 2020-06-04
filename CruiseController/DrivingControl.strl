@@ -1,0 +1,25 @@
+module DrivingControl:
+
+% Inputs
+input EnableCruiseControl;
+input DisableCruiseControl;
+input isGoingOn;
+input Speed : float;
+input Accel : float;
+input Brake : float;
+input Set;
+input QuickAccel;
+input QuickDecel;
+
+% Outputs
+output OutOfSpeedRange;
+output ThrottleCmd : float;
+output AccelPressed;
+output BrakePressed;
+output CruiseSpeed : float;
+
+run SpeedInterface
+||
+run PedalControl
+
+end module

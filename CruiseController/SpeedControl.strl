@@ -26,7 +26,7 @@ var state := 0 : integer in
         trap T1 in
             if state = 0 then
                 present EnableCruiseControl then
-                    emit ThrottleCmd(regulateThrottle(true, ?CruiseSpeed, ?Speed));
+                    emit ThrottleCmd(regulateThrottle(true, ?CruiseSpeed, ?Speed)); %TODO: Should this be ?Speed, ?Speed as CruiseSpeed will = Speed but may lead to non-causality?
 
                     if ?Speed < SpeedMin or ?Speed > SpeedMax then
                         emit OutOfSpeedRange;
