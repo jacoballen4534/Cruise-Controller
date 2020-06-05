@@ -17,8 +17,8 @@ constant SpeedMax = 150.0f : float;
 function regulateThrottle(boolean, float, float) : float;
 
 % FSM encoding:
-% state 0 = Disabled,
-% state 1 = Active,
+% state 0 = Accel_Bypass (OFF, STDBY, DISABLED)
+% state 1 = Managing (ON)
 
 var state := 0 : integer in
     loop
