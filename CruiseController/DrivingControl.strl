@@ -9,6 +9,7 @@ input Brake : float;
 input Set;
 input QuickAccel;
 input QuickDecel;
+input DisableCruiseControl;
 
 % Outputs
 output OutOfSpeedRange;

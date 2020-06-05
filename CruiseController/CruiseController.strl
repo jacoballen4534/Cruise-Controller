@@ -15,7 +15,7 @@ output CruiseSpeed : float;
 output ThrottleCmd : float;
 output CruiseState : integer;
 
-signal OutOfSpeedRange, AccelPressed, BrakePressed, isGoingOn, IsInOnState in
+signal OutOfSpeedRange, AccelPressed, BrakePressed, isGoingOn, IsInOnState, DisableCruiseControl in
     run CruiseControl
     ||
     run DrivingControl

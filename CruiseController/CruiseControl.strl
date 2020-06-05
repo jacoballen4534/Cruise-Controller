@@ -12,6 +12,7 @@ input BrakePressed;
 output CruiseState : integer;
 output isGoingOn;
 output IsInOnState;
+output DisableCruiseControl;
 
 % CRUISE_CONTROL_FSM
 
@@ -37,6 +38,7 @@ loop
         present Off then
             state := 0;
             emit CruiseState(state);
+            emit DisableCruiseControl;
         else
             if state = 1 then
                 present BrakePressed then
