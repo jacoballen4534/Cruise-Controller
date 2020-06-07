@@ -1,0 +1,24 @@
+module CruiseController:
+% Inputs
+input On;
+input Off;
+input Resume;
+input Set;
+input QuickDecel;
+input QuickAccel;
+input Accel := 0.0f : float;
+input Brake := 0.0f : float;
+input Speed := 0.0f : float;
+
+% Outputs
+output CruiseSpeed : float;
+output ThrottleCmd : float;
+output CruiseState : integer;
+
+signal OutOfSpeedRange, AccelPressed, BrakePressed, isGoingOn, IsInOnState, DisableCruiseControl in
+    run CruiseControl
+    ||
+    run DrivingControl
+end signal
+
+end module

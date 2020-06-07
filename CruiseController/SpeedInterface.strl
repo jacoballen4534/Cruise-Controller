@@ -1,0 +1,32 @@
+module SpeedInterface:
+
+% Inputs
+input IsInOnState;
+input isGoingOn;
+input Speed : float;
+input Accel : float;
+
+input Set;
+input QuickAccel;
+input QuickDecel;
+input DisableCruiseControl;
+
+% Outputs
+output OutOfSpeedRange;
+output ThrottleCmd : float;
+output CruiseSpeed : float;
+
+
+signal LocalCruiseSpeed := 0.0f : float in
+    loop
+        present LocalCruiseSpeed then
+            emit CruiseSpeed(?LocalCruiseSpeed);
+        end present;
+        pause
+    end loop
+    ||
+    run CruiseSpeedControl [signal LocalCruiseSpeed/CruiseSpeed]
+    ||
+    run SpeedControl [signal LocalCruiseSpeed/CruiseSpeed]
+end signal
+end module

@@ -2,30 +2,50 @@ module CruiseSpeedControl:
 
 % Inputs
 input Set;
-input Speed : float;
-input EnableCruiseControl;
+input Speed := 0.0f : float;
+input IsInOnState;
+input DisableCruiseControl;
 input QuickDecel;
 input QuickAccel;
 
 % Outputs
-output CruiseSpeed := 0.0f : float;
+output CruiseSpeed : float;
 
 constant Speedinc = 2.5f : float;
 
 function limitSpeed(float) : float;
 
+% FSM encoding:
+% state 0 = OFF,
+% state 1 = Active (ON, STDBY, DISABLED)
+
+var state := 0 : integer in
 var temp := 0.00f : float in
+emit CruiseSpeed(temp);
 loop
-    present
-    case (Set or EnableCruiseControl) do
-        temp := limitSpeed(?Speed);
-    case (QuickAccel and not QuickDecel) do
-        temp := limitSpeed(temp + Speedinc);
-    case (QuickDecel and not QuickAccel) do
-        temp := limitSpeed(temp- Speedinc);
-    end present;
-	emit CruiseSpeed(temp);
+    if state = 0 then
+        present (IsInOnState and not DisableCruiseControl) then % may not need "not DisableCruiseControl"
+            state := 1;
+            temp := limitSpeed(?Speed);
+            emit CruiseSpeed(temp);
+        end present
+    else
+        present
+        case DisableCruiseControl do
+            state := 0;
+        case Set do
+            temp := limitSpeed(?Speed);
+            emit CruiseSpeed(temp);
+        case (QuickAccel and not QuickDecel) do
+            temp := limitSpeed(temp + Speedinc);
+            emit CruiseSpeed(temp);
+        case (QuickDecel and not QuickAccel) do
+            temp := limitSpeed(temp- Speedinc);
+            emit CruiseSpeed(temp);
+        end present;
+    end if;
 each tick;
+end var;
 end var;
 
 end module
