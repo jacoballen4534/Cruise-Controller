@@ -55,3 +55,5 @@ echo -e "Starting tests\n"
 python3 autoTest.py
 
 # Clean up
+cd ../
+rm -rf $TARGET_FOLDER
