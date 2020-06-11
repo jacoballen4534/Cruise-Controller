@@ -1,12 +1,16 @@
-RUN_FILE="CruiseControllerCombined"
+RUN_FILE="cruise"
 TARGET_ESTEREL_FILE=$RUN_FILE.strl
 TARGET_C_FILE="$RUN_FILE"_data.c
-TARGET_FOLDER="Build"
+TARGET_FOLDER="Build_For_Tests"
 
 # Purge old build
-rm -rf Build
+rm -rf $TARGET_FOLDER
 
 cp -R CruiseController/. $TARGET_FOLDER/
+
+# Move auto tester and expected input outputs
+cp -R Test/. $TARGET_FOLDER/
+
 cd $TARGET_FOLDER
 
 shopt -s nullglob #Dont enter if no files were found
@@ -35,6 +39,19 @@ done
 # ensure a .h is present
 touch $RUN_FILE.h
 
-echo -e "\n\nBuild File Setup Complete\n"
-make $RUN_FILE.xes
-./$RUN_FILE.xes
+echo -e "\n\nTest File Setup Complete\n"
+
+# Dont want to delete created .o files
+make clean
+
+# Manualy build for comand line mode.
+/opt/esterelv6_01/bin/esterel -simul $TARGET_ESTEREL_FILE
+gcc -m32 -c $RUN_FILE.c $TARGET_C_FILE
+gcc -m32 -o $RUN_FILE $RUN_FILE.o "$RUN_FILE"_data.o /opt/esterelv6_01/lib/libcsimul.a
+
+echo -e "\n\nManual Build Complete\n"
+
+echo -e "Starting tests\n"
+python3 autoTest.py
+
+# Clean up
