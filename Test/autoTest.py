@@ -10,6 +10,12 @@ def processVectorFile(fileName):
 
     ins =[]
     headerList = []
+    cruiseStateMapping = {
+        "OFF": '0',
+        "ON": '1',
+        "STDBY": '2',
+        "DISABLE": '3',        
+    }
 
     #  Process Test File Vectors.in
 
@@ -24,14 +30,16 @@ def processVectorFile(fileName):
                 #Ignore Comments
                 pass
             else:
-                
                 values = test.split()
-                
-                
                 temp = {}
 
                 for i,header in enumerate(headerList):
-                    entry = {header: values[i]}
+                    value = values[i]
+                    # Replace state enums with values
+                    if (value in cruiseStateMapping):
+                        value = cruiseStateMapping[value]
+
+                    entry = {header: value}
                     temp.update(entry)
                 
                 ins.append(temp)
