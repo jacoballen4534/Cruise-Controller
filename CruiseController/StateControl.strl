@@ -1,4 +1,4 @@
-module CruiseControl:
+module StateControl:
 
 % Inputs
 input On;
