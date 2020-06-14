@@ -14,6 +14,9 @@
   STDBY = 2  
   DISABLE = 3
 
+- The brief states that "The cruise control shall go on when the on button (On) is pressed. The output CruiseState should be set to ON." however, also states that "The cruise control shall be immediately interrupted and should enter the standby state, when the brake (Brake) is pressed. The output CruiseState shall be set to STDBY."  
+  We assume that the first statement takes priority, therefore if the cruise controller is turned on with the brake pressed. The cruise state will go to ON and then to STDBY on the next tick.
+
 # Setting Up The Files
 
 1. Create a folder for the source files to be located.  
@@ -41,6 +44,7 @@ Note: This has only been tested on Ubuntu 18.04 and the UoA Flex.it linux machin
 4. Enter various inputs via the Esterel GUI.
 
 # Running the tests
+
 The original automated testing script was written by Feneel Sanghavi, and has been modified to match our implementation. We do not claim ownership of this script, which has been used purely for testing post-development.
 
 This test suite will use the inputs from <path/to/project>/submission/Test/vectors.in and compare the results to <path/to/project>/submission/Test/vectors.out.
@@ -55,5 +59,6 @@ This test suite will use the inputs from <path/to/project>/submission/Test/vecto
 4. Select a test option (1 for individual tests, 2 for all tests)
 
 # Common Issues
+
 Sometimes when moving the project between Windows and Ubuntu, some files might have incorrect line endings (CRLF) causing the bash scripts to fail.
 If encountered, replace line endings from within VS Code (or your favourite text editor) to be just LF.
