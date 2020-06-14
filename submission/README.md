@@ -53,3 +53,7 @@ This test suite will use the inputs from <path/to/project>/cs723-as2/Test/vector
    Note: This will create a new folder at <path/to/project>/cs723-as2/Build_For_Tests
 
 4. Select a test option (1 for individual tests, 2 for all tests)
+
+# Common Issues
+Sometimes when moving the project between Windows and Ubuntu, some files might have incorrect line endings (CRLF) causing the bash scripts to fail.
+If encountered, replace line endings from within VS Code (or your favourite text editor) to be just LF.

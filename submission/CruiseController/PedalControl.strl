@@ -1,0 +1,13 @@
+
+module PedalControl:
+
+input Accel : float;
+input Brake : float;
+output AccelPressed;
+output BrakePressed;
+
+run BrakePedal
+||
+run AccelPedal
+
+end module

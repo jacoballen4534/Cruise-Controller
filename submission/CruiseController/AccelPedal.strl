@@ -1,0 +1,17 @@
+module AccelPedal:
+
+% Inputs
+input Accel : float;
+
+% Outputs
+output AccelPressed;
+
+constant PedalsMin = 3.0f : float;
+
+loop
+    if ?Accel > PedalsMin then
+        emit AccelPressed;
+    end if;
+each tick;
+
+end module

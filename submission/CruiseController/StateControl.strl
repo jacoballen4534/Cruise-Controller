@@ -1,0 +1,89 @@
+module StateControl:
+
+% Inputs
+input On;
+input Off;
+input OutOfSpeedRange;
+input AccelPressed;
+input Resume;
+input BrakePressed;
+
+% Outputs
+output CruiseState : integer;
+output isGoingOn;
+output IsInOnState;
+output DisableCruiseControl;
+
+% CRUISE_CONTROL_FSM
+
+% FSM encoding:
+% state 0 = OFF,
+% state 1 = ON,
+% state 2 = STDBY,
+% state 3 = DISABLE
+var state := 0 : integer in
+emit CruiseState(state);
+
+loop
+    await tick;
+    
+    if state = 0 then
+        present On then
+            state := 1;
+            emit isGoingOn;
+            emit IsInOnState;
+            emit CruiseState(state);
+        end present;
+    else 
+        present Off then
+            state := 0;
+            emit CruiseState(state);
+            emit DisableCruiseControl;
+        else
+            if state = 1 then
+                present BrakePressed then
+                    state := 2;
+                    emit CruiseState(state);
+                else
+                    present (OutOfSpeedRange or AccelPressed) then
+                        state := 3;
+                        emit CruiseState(state);
+                    else
+                        emit IsInOnState;
+                        emit CruiseState(state);
+                    end present;
+                end present;
+            elsif state = 2 then
+                present (Resume and not BrakePressed) then
+                    present (OutOfSpeedRange or AccelPressed) then
+                        state := 3;
+                        emit CruiseState(state);
+                    else
+                        state := 1;
+                        emit IsInOnState;
+                        emit CruiseState(state);
+                        emit isGoingOn;
+                    end present;
+                end present
+            else
+                trap t3 in
+                    present (BrakePressed) then
+                        state := 2;
+                        emit CruiseState(state);
+                        exit t3;
+                    end present;
+                    present (not OutOfSpeedRange and not AccelPressed) then
+                        state := 1;
+                        emit IsInOnState;
+                        emit CruiseState(state);
+                        exit t3;
+                    end present;
+                end trap;
+            end if;
+        end present;
+    end if;
+    
+end loop;
+end var
+
+end module
