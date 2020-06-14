@@ -19,7 +19,7 @@
 1. Create a folder for the source files to be located.  
    The path to this folder will be referred to as <path/to/project>
 
-2. Place the root of the project (cs723-as2) in <path/to/project>
+2. Place the root of the project (submission) in <path/to/project>
 
 # Prerequisites
 
@@ -33,24 +33,24 @@ Note: This has only been tested on Ubuntu 18.04 and the UoA Flex.it linux machin
 
 1. Open a terminal
 
-2. Navigate to <path/to/project>/cs723-as2 directory.
+2. Navigate to <path/to/project>/submission directory.
 
 3. Run the command `./build.sh` to build and start the program.  
-   Note: This will create a new folder at <path/to/project>/cs723-as2/Build
+   Note: This will create a new folder at <path/to/project>/submission/Build
 
 4. Enter various inputs via the Esterel GUI.
 
 # Running the tests
 The original automated testing script was written by Feneel Sanghavi, and has been modified to match our implementation. We do not claim ownership of this script, which has been used purely for testing post-development.
 
-This test suite will use the inputs from <path/to/project>/cs723-as2/Test/vectors.in and compare the results to <path/to/project>/cs723-as2/Test/vectors.out.
+This test suite will use the inputs from <path/to/project>/submission/Test/vectors.in and compare the results to <path/to/project>/submission/Test/vectors.out.
 
 1. Open a terminal
 
-2. Navigate to <path/to/project>/cs723-as2 directory.
+2. Navigate to <path/to/project>/submission directory.
 
 3. Run the command `./test.sh` to build and start the test suite.  
-   Note: This will create a new folder at <path/to/project>/cs723-as2/Build_For_Tests
+   Note: This will create a new folder at <path/to/project>/submission/Build_For_Tests
 
 4. Select a test option (1 for individual tests, 2 for all tests)
 
