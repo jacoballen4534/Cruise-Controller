@@ -1,3 +1,7 @@
+# Cruise Controller
+This is a project for the cource CS723 at the University of Auckland.
+This is a cruise controller, writen in the synchronious programming language, esterel.
+
 ## Assumptions Made
 
 - The brief does not explicitly state the expected behaviour of the ThrottleCmd when in the STDBY and DISABLE states.
