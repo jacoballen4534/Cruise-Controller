@@ -1,6 +1,6 @@
 # Cruise Controller
 This is a project for the cource CS723 at the University of Auckland.
-This is a cruise controller, writen in the synchronious programming language, esterel.
+This is a cruise controller, writen in the synchronous programming language, esterel.
 
 ## Assumptions Made
 
